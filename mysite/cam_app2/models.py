@@ -89,8 +89,13 @@ class ImagePage(Page):
                     ###
                     # For each file, read, pass to model, do something, save it #
                     ###
-                    filename = file.split('/')[-1]
+                    print('file',file)
+                    filename = file.split('\\')[-1]
                     filepath = os.path.join(fileroot, filename)
+                    print('fileroot',fileroot)
+                    print('filename',filename)
+                    print('filepath',filepath)
+                    print('filepath stripped',filepath.strip())
                     img = cv2.imread(filepath.strip())
                     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                     fn = filename.split('.')[:-1][0]

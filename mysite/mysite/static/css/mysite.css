@@ -2,3 +2,8 @@
 
   border-radius: 10px;
 }
+
+@font-face {
+  font-family: 'Autography';
+  src: url('./fonts/Autography.otf') format('truetype');
+}
