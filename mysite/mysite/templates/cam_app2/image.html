@@ -92,13 +92,18 @@
           });
     </script>
 
-    <form class="input-group mb-3" method="POST" enctype="multipart/form-data" id="form1">
-          <div class="file-drop-area"> <span class="choose-file-button btn-primary">Choose Files</span> <span class="file-message">or drag and drop files here</span> <input type="file" name="file_data" class="file-input" accept=".jfif,.jpg,.jpeg,.png,.gif" multiple> </div>
-          {% csrf_token %}
-          <div class="container-fluid p-2">
-                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Upload</button>
-          </div>
+    <form class="input-group mb-3" method="POST" enctype="multipart/form-data" id="form1" style="align-items: center; display: flex; flex-direction: column; justify-content: center;">
+      <div class="file-drop-area" style="align-items: center; display: flex; flex-direction: column; justify-content: center; width: 100%;">
+          <span class="choose-file-button btn-primary">Choose Files</span>
+          <span class="file-message">or drag and drop files here</span>
+          <input type="file" name="file_data" class="file-input" accept=".jfif,.jpg,.jpeg,.png,.gif" multiple>
+      </div>
+      {% csrf_token %}
+      <div class="container-fluid p-2" style="width: 100%; display: flex; justify-content: center;">
+          <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Upload</button>
+      </div>
     </form>
+
     <h6>List of selected/uploaded files <span style="font-style: italic">(click to open in new tab)</span>: </h6>
     <ul>
 
@@ -112,7 +117,7 @@
 </div>
 </center>
 
-<div class=" ">
+<div class=" " style="align-items: center; display: flex; flex-direction: column; justify-content: center; width: 100%;">
   <form method="POST" id="start">
     {% csrf_token %}
     <button class="btn btn-primary" type="submit" name="start" id="start">Start</button>
