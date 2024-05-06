@@ -6,4 +6,8 @@
 @font-face {
   font-family: 'Autography';
   src: url('./fonts/Autography.otf') format('truetype');
+
+  font-family: 'Helvetica-Neue';
+  src: url('./fonts/HelveticaNeueBlack.otf') format('truetype');
+  
 }
