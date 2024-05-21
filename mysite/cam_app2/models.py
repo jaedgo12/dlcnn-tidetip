@@ -16,7 +16,7 @@ from django.core.files.storage import default_storage
 from pathlib import Path
 
 
-import os, uuid, glob, cv2
+import os, uuid, glob, cv2, torch
 
 str_uuid = uuid.uuid4()  # The UUID for image uploading
 
@@ -77,6 +77,15 @@ class ImagePage(Page):
     def serve(self, request):
         emptyButtonFlag = False
         if request.POST.get('start')=="":
+
+
+            ##on start button press,
+
+            model_path = os.path.join(settings.BASE_DIR, "deep_learning_models/best.pt")
+            self.model = torch.hub.load(
+            "ultralytics/yolov5", "custom", path=model_path, force_reload=False
+            )
+
             context = self.reset_context(request)
             print(request.POST.get('start'))
             print("Start selected")
@@ -97,11 +106,59 @@ class ImagePage(Page):
                     print('filepath',filepath)
                     print('filepath stripped',filepath.strip())
                     img = cv2.imread(filepath.strip())
-                    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+
+
+
+                    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                    # fn = filename.split('.')[:-1][0]
+                    # r_filename = f'result_{fn}.jpeg'
+                    # print(r_filename)
+                    # cv2.imwrite(str(os.path.join(res_f_root, r_filename)), gray)
+
+                    # Perform YOLOv5 detection
+                    results = self.model(img)
+
+                    # Draw bounding boxes and labels on the image
+                    for detection in results.xyxy[0]:  # Assuming a single image in the batch
+                        x1, y1, x2, y2 = map(int, detection[:4])
+                        conf = detection[4]
+                        cls = int(detection[5])
+                        # label = f"{self.model.names[cls]} {conf:.2f}"
+
+
+                        if conf >= 0 and conf < 0.3:
+                            conf_label = 'Conf: Low'
+                        elif conf >= 0.3 and conf < 0.6:
+                            conf_label = 'Conf: Medium'
+                        else:
+                            conf_label = 'Conf: High'
+
+
+                        label = f"{self.model.names[cls]} {conf_label}"
+                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.putText(
+                            img,
+                            label,
+                            (x1, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.9,
+                            (0, 255, 0),
+                            2,
+                        )
+
+
+                    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                     fn = filename.split('.')[:-1][0]
                     r_filename = f'result_{fn}.jpeg'
                     print(r_filename)
-                    cv2.imwrite(str(os.path.join(res_f_root, r_filename)), gray)
+                    cv2.imwrite(str(os.path.join(res_f_root, r_filename)), img)
+
+
+
+
+
+
                     r_media_filepath = Path(f"{settings.MEDIA_URL}Result/{r_filename}")
                     print(r_media_filepath)
                     with open(Path(f'{settings.MEDIA_ROOT}/Result/Result.txt'), 'a') as f:
