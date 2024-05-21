@@ -31,7 +31,7 @@ class VideoCamera(object):
         # self.video = cv2.VideoCapture('video.mp4')
         model_path = os.path.join(settings.BASE_DIR, "deep_learning_models/best.pt")
         self.model = torch.hub.load(
-            "ultralytics/yolov5", "custom", path=model_path, force_reload=True
+            "ultralytics/yolov5", "custom", path=model_path, force_reload=False
         )
 
     def __del__(self):
@@ -90,8 +90,19 @@ class VideoCamera(object):
 
         # Draw bounding boxes and labels on the image
         for detection in results.xyxy[0]:  # Assuming a single image in the batch
-            x1, y1, x2, y2, conf, cls = map(int, detection[:6])
-            label = f"{self.model.names[cls]} {conf:.2f}"
+            x1, y1, x2, y2 = map(int, detection[:4])
+            conf = detection[4]
+            cls = int(detection[5])
+
+            if conf >= 0 and conf < 0.3:
+                conf_label = 'Conf: Low'
+            elif conf >= 0.3 and conf < 0.6:
+                conf_label = 'Conf: Medium'
+            else:
+                conf_label = 'Conf: High'
+
+
+            label = f"{self.model.names[cls]} {conf_label}"
             cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.putText(
                 image,
