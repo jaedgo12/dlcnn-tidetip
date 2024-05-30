@@ -84,6 +84,14 @@ class VideoCamera(object):
         success, image = self.video.read()
         if not success:
             return None, None
+        
+        
+        # gray_img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+        image_array = np.array(image)
+
+        # Decrease brightness by 70%
+        image = (image_array * 0.7).clip(0, 255).astype(np.uint8)
 
         # Perform YOLOv5 detection
         results = self.model(image)
