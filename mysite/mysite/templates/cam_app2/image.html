@@ -189,7 +189,7 @@
           <div class="carousel-inner">
             {% for my_file1 in my_uploaded_file_names %}
                 <div class="carousel-item {% if forloop.first %} active {% endif %} ">
-                  <a href="{{my_file1}}" target="_blank"><img src="{{my_file1}}" class="d-block w-100"></a>
+                  <a href="{{my_file1}}" target="_blank"><img src="{{my_file1}}" class="d-block w-50 mx-auto"></a>
                 <!-- <img src="{{my_file1}}" class="d-block w-100"> -->
                 </div>
             {% endfor %}
@@ -216,7 +216,7 @@
           <div class="carousel-inner">
             {% for my_file3 in my_result_file_names %}
                 <div class="carousel-item {% if forloop.first %} active {% endif %} ">
-                  <a href="{{my_file3}}" target="_blank"><img src="{{my_file3}}" class="d-block w-100"></a>
+                  <a href="{{my_file3}}" target="_blank"><img src="{{my_file3}}" class="d-block w-50 mx-auto" ></a>
                 </div>
             {% endfor %}
           </div>
